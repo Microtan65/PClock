@@ -11,27 +11,23 @@ class PongAnimation extends Animation {
       case Some(state) => doPong(state, time)
       case None        => doPong(initState(time), time)
     }
-
   }
 
   def initState(time: DateTime): AnimationState = List(
     Ball(0, 0, 1, 0.8),
-    Digit3x5(15, 0, digitFromTime(time, 0), 0),
-    Digit3x5(19, 0, digitFromTime(time, 1), 1),
-    Digit3x5(25, 0, digitFromTime(time, 2), 2),
-    Digit3x5(29, 0, digitFromTime(time, 3), 3),
-    Paddle(0,5),
-    Paddle(47,5),
-    Net(23,0))
+    Score(15, 0, time),
+    Paddle(0, 5),
+    Paddle(47, 5),
+    Net(23, 0))
 
   def doPong(state: AnimationState, time: DateTime): (AnimationState, List[(Int, Int)]) = {
     val newState = state.map {
-      case ball: Ball      => moveBall(ball)
-      case digit: Digit3x5 => updateDigit(digit, time)
-      case e => e
+      case ball: Ball   => moveBall(ball)
+      case score: Score => updateScore(score, time)
+      case e            => e
     }
 
-    val pixels = newState.foldLeft(List[(Int, Int)]())((pixels, entity) => entity.draw() ++ pixels) 
+    val pixels = newState.foldLeft(List[(Int, Int)]())((pixels, entity) => entity.draw() ++ pixels)
 
     (newState, pixels)
   }
@@ -45,7 +41,7 @@ class PongAnimation extends Animation {
         0 - ball.xSpeed
       else
         ball.xSpeed
-        
+
     val ySpeed = if (yPos == 15 || yPos == 0)
       0 - ball.ySpeed
     else
@@ -54,17 +50,8 @@ class PongAnimation extends Animation {
     Ball(xPos, yPos, xSpeed, ySpeed)
   }
 
-  def updateDigit(digit: Digit3x5, time: DateTime): Digit3x5 = {
-    if (time.getSecondOfMinute != 4) digit
-    else Digit3x5(digit.xPos, digit.yPos, digitFromTime(time, digit.id), digit.id)
-  }
-
-  def digitFromTime(time: DateTime, digitId: Int): Int = {
-    digitId match {
-      case 0 => time.getHourOfDay / 10
-      case 1 => time.getHourOfDay % 10
-      case 2 => time.getMinuteOfHour / 10
-      case 3 => time.getMinuteOfHour % 10
-    }
+  def updateScore(score: Score, time: DateTime): Score = {
+    if (time.getSecondOfMinute != 4) score
+    else Score(score.xPos, score.yPos, time)
   }
 }

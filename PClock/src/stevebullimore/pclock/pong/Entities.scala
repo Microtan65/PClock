@@ -9,9 +9,9 @@ case class Ball(xPos: Double, yPos: Double, xSpeed: Double, ySpeed: Double) exte
   private def predictY(): Double = 5 // TODO calc predicted Y when reaches edge
   
   override def getEvents(time: DateTime): List[AnimationEvent] = {
-    if (xSpeed < 0 && xPos > 23 && (xPos + xSpeed < 23))
+    if (xSpeed < 0 && xPos > 23 && (xPos + xSpeed <= 23))
       List(BallPassNetTowardLeft(predictY()))
-    else if (xPos < 23 && (xPos + xSpeed > 23))
+    else if (xPos < 23 && (xPos + xSpeed >= 23))
       List(BallPassNetTowardRight(predictY()))
     else
       List()
@@ -86,8 +86,8 @@ case class Score(xPos: Double, yPos: Double, time: DateTime) extends AnimationEn
   override def getEvents(latestTime: DateTime): List[AnimationEvent] = { 
     if (latestTime.getSecondOfMinute == 4) List(NewGame())
     else if (latestTime.getSecondOfMinute < 4) {
-      if (latestTime.getMinuteOfHour == 0) List(RightToWin())
-      else List(LeftToWin())
+      if (latestTime.getMinuteOfHour == 0) List(LeftToWin())
+      else List(RightToWin())
     }
     else List()
   }

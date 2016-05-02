@@ -11,19 +11,20 @@ object PClock {
 
   def main(args: Array[String]) {
     val animation = animations(0)
-
+    
     @tailrec
-    def animationLoop(state: Option[AnimationState]): Unit = {
+    def animationLoop(state: AnimationState): Unit = {
       val (newState, pixels) = animation.animate(state, new DateTime())
 
+      // side effects to LED panel..
       SpiWriter.writePanel0(panel0.computeFrame(pixels))
       SpiWriter.writePanel1(panel1.computeFrame(pixels))
       
       Thread.sleep(20)
 
-      animationLoop(Some(newState))
+      animationLoop(newState)
     }
 
-    animationLoop(None)
+    animationLoop(animation.init(new DateTime()))
   }
 }

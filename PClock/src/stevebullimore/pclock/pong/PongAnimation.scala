@@ -1,8 +1,7 @@
 package stevebullimore.pclock.pong
 
 import org.joda.time.DateTime
-
-import stevebullimore.pclock.{ Animation, AnimationEntity, AnimationState, Digit3x5 }
+import stevebullimore.pclock.{ Animation }
 
 class PongAnimation extends Animation {
 

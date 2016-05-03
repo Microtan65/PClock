@@ -15,6 +15,9 @@ class Sure2416LedPanel(panelNum: Int) {
         val byteIndex = 1 + bitOffset / 8
         val bitIndex = bitOffset % 8;
         bytes(byteIndex) = (bytes(byteIndex) | (0x80 >> bitIndex)).toByte
+        // copy 1st set of pixels to end to cater for extra bits wrapping
+        if (byteIndex == 1) 
+          bytes(49) = (bytes(49) | (0x80 >> bitIndex)).toByte
       }
     }
 

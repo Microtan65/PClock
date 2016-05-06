@@ -4,6 +4,8 @@ import org.joda.time.DateTime
 import stevebullimore.pclock.{ Animation }
 
 class PongAnimation extends Animation {
+  
+  override def name = "Pong"
 
   override def init(time: DateTime) = List(
     Ball(0, 0, 1, 0.8),

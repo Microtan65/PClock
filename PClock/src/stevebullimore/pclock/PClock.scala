@@ -2,29 +2,29 @@ package stevebullimore.pclock
 
 import scala.annotation.tailrec
 import stevebullimore.pclock.pong.PongAnimation
+import stevebullimore.pclock.pong.InvadersAnimation
 import org.joda.time.DateTime
+import akka.actor.{ Actor, ActorSystem, Props }
+import akka.io.IO
+import akka.routing.RoundRobinPool
+import spray.can.Http
 
 object PClock {
-  val animations = List[Animation](new PongAnimation())
+  val animations = List[Animation](new PongAnimation(), new InvadersAnimation())
   val panel0 = new Sure2416LedPanel(0)
   val panel1 = new Sure2416LedPanel(1)
 
   def main(args: Array[String]) {
-    val animation = animations(0)
+    implicit val system = ActorSystem("PClockSystem")
     
-    @tailrec
-    def animationLoop(state: AnimationState): Unit = {
-      val (newState, pixels) = animation.animate(state, new DateTime())
+    // create and start the animation actor
+    system.actorOf(Props[AnimationActor], name = "AnimationActor")
 
-      // side effects to LED panel..
-      SpiWriter.writePanel0(panel0.computeFrame(pixels))
-      SpiWriter.writePanel1(panel1.computeFrame(pixels))
-      
-      Thread.sleep(20)
+    // create and start http service actor
+    val httpActor = system.actorOf(RoundRobinPool(5).props(Props[HttpActor]), "HttpActor")
 
-      animationLoop(newState)
-    }
-
-    animationLoop(animation.init(new DateTime()))
+    // start a new HTTP server on port 8080 with our http actor as the handler
+    IO(Http) ! Http.Bind(httpActor, "0.0.0.0", port = 8080)
   }
 }
+

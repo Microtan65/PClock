@@ -16,6 +16,7 @@ trait AnimationEntity {
 
 
 trait Animation {
+  def name: String
   def init(time: DateTime): AnimationState
   def animate(state: AnimationState, time: DateTime): (AnimationState, List[(Int, Int)]) = {
     

@@ -1,4 +1,4 @@
-package stevebullimore.pclock
+package stevebullimore.pclock.display
 
 import Sure2416LedPanel._
 

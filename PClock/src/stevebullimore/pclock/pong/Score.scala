@@ -1,7 +1,7 @@
 package stevebullimore.pclock.pong
 
 import org.joda.time.DateTime
-import stevebullimore.pclock.{AnimationEntity, AnimationEvent, Digit3x5}
+import stevebullimore.pclock.display.Digit3x5
 
 case class Score(xPos: Double, yPos: Double, time: DateTime) extends AnimationEntity {
   override def getEvents(latestTime: DateTime): List[AnimationEvent] = {

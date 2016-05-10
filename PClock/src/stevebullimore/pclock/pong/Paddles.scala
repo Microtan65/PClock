@@ -1,7 +1,6 @@
 package stevebullimore.pclock.pong
 
 import org.joda.time.DateTime
-import stevebullimore.pclock.{AnimationEntity, AnimationEvent}
 
 trait PaddleEntity extends AnimationEntity {
   def yDest: Double

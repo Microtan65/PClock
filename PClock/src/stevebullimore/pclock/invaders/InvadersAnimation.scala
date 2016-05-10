@@ -1,11 +1,17 @@
-package stevebullimore.pclock.pong
+package stevebullimore.pclock.invaders
 
+import akka.actor.Actor
 import org.joda.time.DateTime
-import stevebullimore.pclock.{ Animation }
+import stevebullimore.pclock.animsup.messages._
 
-class InvadersAnimation extends Animation {
+class InvadersAnimation extends Actor {
   
-  override def name = "Invaders"
+  def name = "Invaders"
 
-  override def init(time: DateTime) = List()
+  override def receive = {
+    case AnimationInit(time, data) =>
+      sender() ! Frame(List())
+    case Animate(time) =>
+      sender() ! Frame(List())
+  }
 }

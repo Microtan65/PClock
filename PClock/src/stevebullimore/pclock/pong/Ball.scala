@@ -2,7 +2,6 @@ package stevebullimore.pclock.pong
 
 import org.joda.time.DateTime
 
-import stevebullimore.pclock.{AnimationEntity, AnimationEvent}
 
 case class Ball(xPos: Double, yPos: Double, xSpeed: Double, ySpeed: Double) extends AnimationEntity {
 

@@ -2,7 +2,7 @@ package stevebullimore.pclock.pong
 
 import scala.annotation.tailrec
 import org.joda.time.DateTime
-import stevebullimore.pclock.{AnimationEntity, AnimationEvent}
+
 
 case class Net(xPos: Double, yPos: Double) extends AnimationEntity {
   override def getEvents(time: DateTime): List[AnimationEvent] = List()

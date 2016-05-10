@@ -1,24 +1,22 @@
 package stevebullimore.pclock
 
 import scala.annotation.tailrec
-import stevebullimore.pclock.pong.PongAnimation
-import stevebullimore.pclock.pong.InvadersAnimation
+import stevebullimore.pclock.animsup.AnimationSupervisor
 import org.joda.time.DateTime
 import akka.actor.{ Actor, ActorSystem, Props }
 import akka.io.IO
 import akka.routing.RoundRobinPool
 import spray.can.Http
+import stevebullimore.pclock.http.HttpActor
 
 object PClock {
-  val animations = List[Animation](new PongAnimation(), new InvadersAnimation())
-  val panel0 = new Sure2416LedPanel(0)
-  val panel1 = new Sure2416LedPanel(1)
+  
 
   def main(args: Array[String]) {
     implicit val system = ActorSystem("PClockSystem")
     
     // create and start the animation actor
-    system.actorOf(Props[AnimationActor], name = "AnimationActor")
+    system.actorOf(Props[AnimationSupervisor], name = "AnimationActor")
 
     // create and start http service actor
     val httpActor = system.actorOf(RoundRobinPool(5).props(Props[HttpActor]), "HttpActor")

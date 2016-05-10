@@ -1,6 +1,6 @@
-package stevebullimore.pclock
+package stevebullimore.pclock.display
 
-import Digit3x5._
+import scala.Vector
 
 object Digit3x5 {
   val digits = Vector(

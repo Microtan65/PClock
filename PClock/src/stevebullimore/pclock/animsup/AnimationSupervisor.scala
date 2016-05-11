@@ -8,6 +8,7 @@ import states._
 import stevebullimore.pclock.pong._
 import stevebullimore.pclock.invaders._
 import stevebullimore.pclock.msg._
+import stevebullimore.pclock.rss._
 import stevebullimore.pclock.display.LEDDisplay
 
 class AnimationSupervisor extends Actor{
@@ -16,7 +17,7 @@ class AnimationSupervisor extends Actor{
   private val display = system.actorOf(Props[LEDDisplay])
   
   private val continuousAnims = Array[ActorRef](system.actorOf(Props[PongAnimation]), system.actorOf(Props[InvadersAnimation]))
-  private val finiteAnims = Array[ActorRef](system.actorOf(Props[MsgAnimation]))
+  private val finiteAnims = Array[ActorRef](system.actorOf(Props[MsgAnimation]), system.actorOf(Props[RssAnimation]))
   
   override def preStart() = {
     self ! SelectFiniteAnim(0, Option("Welcome to PClock v0.01"), None)

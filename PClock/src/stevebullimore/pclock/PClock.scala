@@ -1,8 +1,6 @@
 package stevebullimore.pclock
 
-import scala.annotation.tailrec
 import stevebullimore.pclock.animsup.AnimationSupervisor
-import org.joda.time.DateTime
 import akka.actor.{ Actor, ActorSystem, Props }
 import akka.io.IO
 import akka.routing.RoundRobinPool
@@ -11,7 +9,6 @@ import stevebullimore.pclock.http.HttpActor
 
 object PClock {
   
-
   def main(args: Array[String]) {
     implicit val system = ActorSystem("PClockSystem")
     

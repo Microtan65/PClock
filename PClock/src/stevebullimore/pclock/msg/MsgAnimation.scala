@@ -5,33 +5,26 @@ import stevebullimore.pclock.display.Font5x7
 import stevebullimore.pclock.animsup.messages._
 import akka.actor.Actor
 
-case class MsgAnimationState(message: String, x: Int, count: Int)
-
 class MsgAnimation extends Actor {
 
-  override def receive = idle(MsgAnimationState("", 0, 0))
+  override def receive = idle()
   
-  private def idle(state: MsgAnimationState): Receive = {
+  private def idle(): Receive = {
     case AnimationInit(time, data) =>
-      context.become(scrollMessage(MsgAnimationState(data.getOrElse("?"), 48, 0)))
-      draw(state)
+      sender() ! Frame(List())
+      context.become(scrollMessage(data.getOrElse("?"), 48, 0))
   }
   
-  private def scrollMessage(state: MsgAnimationState): Receive = {
-    case Animate(time) =>
-      val count = if (state.count == 1) 0 else state.count + 1
-      val x = if (count == 0) state.x - 1 else state.x
-      if (x < (state.message.length() * -6)) {
-        context.become(idle(MsgAnimationState("", 0, 0)))
+  private def scrollMessage(message: String, x: Int, count: Int): Receive = {
+    case Animate(_) =>
+      val newCount = if (count == 1) 0 else count + 1
+      val newX = if (newCount == 0) x - 1 else x
+      if (newX < (message.length() * -6)) {
         sender() ! AnimationEnded()
+        context.become(idle())
       } else {
-        val newState = MsgAnimationState(state.message, x, count)
-        context.become(scrollMessage(newState))
-        draw(newState)
+        sender() ! Frame(Font5x7.draw(newX, 4, message))
+        context.become(scrollMessage(message, newX, newCount))
       }
-  }
-  
-   private def draw(state: MsgAnimationState) {
-      sender() ! Frame(Font5x7.draw(state.x, 4, state.message))
   }
 }

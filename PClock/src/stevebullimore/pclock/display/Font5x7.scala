@@ -3,7 +3,7 @@ package stevebullimore.pclock.display
 import scala.Vector
 
 object Font5x7 {
-  val digits = Vector(
+  val chars = Vector(
     List(),
     List((2, 0), (2, 1), (2, 2), (2, 3), (2, 4), (2, 6)),
     List((4, 0), (1, 0), (4, 1), (1, 1), (3, 2), (0, 2)),
@@ -102,10 +102,11 @@ object Font5x7 {
     List((4, 0), (3, 0), (2, 0), (1, 0), (0, 0), (4, 1), (3, 1), (2, 1), (1, 1), (0, 1), (4, 2), (3, 2), (2, 2), (1, 2), (0, 2), (4, 3), (3, 3), (2, 3), (1, 3), (0, 3), (4, 4), (3, 4), (2, 4), (1, 4), (0, 4), (4, 5), (3, 5), (2, 5), (1, 5), (0, 5), (4, 6), (3, 6), (2, 6), (1, 6), (0, 6)))
     
   def draw(xPos: Int, yPos: Int, c: Char): List[(Int, Int)] = {
-    if ((32 until 127).contains(c.toInt) && (-4 until 47).contains(xPos))
-      digits(c.toInt - 32).map { case (x, y) => ((x + xPos).toInt, (y + yPos).toInt) }
-    else
-      List()
+    chars.lift(c.toInt - 32).map { ch =>   
+      (-4 until 47).lift(xPos).map { okX =>
+        ch.map { case (x, y) => ((x + okX).toInt, (y + yPos).toInt) }
+      } getOrElse List()
+    } getOrElse List()
   }
 
   def draw(xPos: Int, yPos: Int, s: String): List[(Int, Int)] = {

@@ -34,11 +34,11 @@ class RssAnimation extends Actor {
           val items = for (item <- itemNodes) yield item.text
           msgAnimation ! AnimationInit(new DateTime(), Option(items(0)))
         case Failure(error) =>
-          msgAnimation ! AnimationInit(new DateTime(), Option(error.toString()))
+          msgAnimation ! AnimationInit(new DateTime(), Option("Error parsing feed XML"))
       }
       context.become(showingFeed(anim))
     case Status.Failure(error) =>
-      msgAnimation ! AnimationInit(new DateTime(), Option(error.toString()))
+      msgAnimation ! AnimationInit(new DateTime(), Option(s"Error contacting $url"))
       context.become(showingFeed(anim))      
   }
   

@@ -5,8 +5,6 @@ import org.joda.time.DateTime
 import stevebullimore.pclock.animsup.messages._
 
 class InvadersAnimation extends Actor {
-  
-  def name = "Invaders"
 
   override def receive = {
     case AnimationInit(time, data) =>

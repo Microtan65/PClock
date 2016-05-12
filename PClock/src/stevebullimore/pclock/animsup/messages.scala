@@ -9,4 +9,9 @@ object messages {
   case class AnimationEnded()
   case class SelectContinuousAnim(id: Int)
   case class SelectFiniteAnim(id: Int, data: Option[String], freq: Option[Int])
+  case class AskAnimations()
+  case class AnimationInfos(infos: List[AnimationInfos.AnimationInfo])
+  object AnimationInfos {
+    case class AnimationInfo(id: Int, name: String, continuous: Boolean, active: Boolean)
+  }
 }

@@ -23,7 +23,7 @@ case class LeftPaddle(yPos: Double, yDest: Double) extends PaddleEntity {
   override val xPos: Double = 0
   override def update(events: List[AnimationEvent], time: DateTime): AnimationEntity = {
     val (newYPos, newYDest) = move(events, event => {event match {
-      case BallPassNetTowardLeft(predictedY) => if (events.contains(RightToWin())) miss(predictedY - 2) else predictedY - 2
+      case BallPassNetTowardLeft(predictedY, win) => if (win) miss(predictedY - 2) else predictedY - 2
       case _                                 => yDest
     } })
     LeftPaddle(newYPos, newYDest)
@@ -34,7 +34,7 @@ case class RightPaddle(yPos: Double, yDest: Double) extends PaddleEntity {
   override val xPos: Double = 47
   override def update(events: List[AnimationEvent], time: DateTime): AnimationEntity = {
         val (newYPos, newYDest) = move(events, event => {event match {
-      case BallPassNetTowardRight(predictedY) => if (events.contains(LeftToWin())) miss(predictedY - 2) else predictedY - 2
+      case BallPassNetTowardRight(predictedY, win) => if (win) miss(predictedY - 2) else predictedY - 2
       case _                                  => yDest
     } })
     RightPaddle(newYPos, newYDest)

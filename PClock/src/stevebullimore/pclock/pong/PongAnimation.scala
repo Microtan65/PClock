@@ -37,7 +37,7 @@ class PongAnimation extends Actor {
   }
   
   private def init(time: DateTime) = List(
-    Ball(0, 0, 1, 0.8),
+    Ball(0, 0, 1, 0.8, true),
     Score(15, 0, time),
     LeftPaddle(5, 5),
     RightPaddle(5, 5),

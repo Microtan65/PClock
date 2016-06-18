@@ -5,11 +5,8 @@ import stevebullimore.pclock.display.Digit3x5
 
 case class Score(xPos: Double, yPos: Double, time: DateTime) extends AnimationEntity {
   override def getEvents(latestTime: DateTime): List[AnimationEvent] = {
-    if (latestTime.getSecondOfMinute == 4) List(NewGame())
-    else if (latestTime.getSecondOfMinute < 4) {
-      if (latestTime.getMinuteOfHour == 0) List(LeftToWin())
-      else List(RightToWin())
-    } else List()
+    if (latestTime.getSecondOfMinute == 0) List(NewGame())
+    else List()
   }
   override def update(events: List[AnimationEvent], time: DateTime): AnimationEntity = {
     if (events.contains(NewGame())) Score(xPos, yPos, time)

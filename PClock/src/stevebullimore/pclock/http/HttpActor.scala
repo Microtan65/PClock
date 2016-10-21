@@ -14,6 +14,7 @@ import spray.json.DefaultJsonProtocol
 import spray.routing.Directive.pimpApply
 import spray.routing.HttpService
 import stevebullimore.pclock.animsup.messages._
+import stevebullimore.pclock.display.Brightness
 
 class HttpActor extends Actor with ClockHttpService {
 
@@ -54,6 +55,10 @@ trait ClockHttpService extends HttpService {
       }
     } ~
     post {
+      path("brightness" / IntNumber) { levelPercent =>
+        actorRefFactory.actorSelection("../../AnimationActor") ! Brightness(levelPercent)
+        complete(StatusCodes.NoContent)
+      } ~
       path("animationc" / IntNumber) { animationIdx =>
         actorRefFactory.actorSelection("../../AnimationActor") ! SelectContinuousAnim(animationIdx)
         complete(StatusCodes.NoContent)

@@ -10,7 +10,7 @@ import stevebullimore.pclock.pong._
 import stevebullimore.pclock.invaders._
 import stevebullimore.pclock.msg._
 import stevebullimore.pclock.rss._
-import stevebullimore.pclock.display.LEDDisplay
+import stevebullimore.pclock.display._
 
 class AnimationSupervisor extends Actor {
   import context._
@@ -77,5 +77,7 @@ class AnimationSupervisor extends Actor {
     case AskAnimations() =>
       sender() ! AnimationInfos(continuousAnims.zipWithIndex.map{case (a, i) => AnimationInfos.AnimationInfo(i, "name", true, a == anim)} ++
         finiteAnims.zipWithIndex.map{case (a, i) => AnimationInfos.AnimationInfo(i, "name", false, a == anim)})
+    case b: Brightness =>
+      display ! b
   }
 }

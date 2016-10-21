@@ -11,9 +11,9 @@ case class Ball(xPos: Double, yPos: Double, xSpeed: Double, ySpeed: Double, xBou
 
   override def getEvents(time: DateTime): List[AnimationEvent] = {
     if (xSpeed < 0 && xPos > 23 && (xPos + xSpeed <= 23))
-      List(BallPassNetTowardLeft(predictY(), time.getSecondOfMinute > 56 && time.getMinuteOfHour == 0))
+      List(BallPassNetTowardLeft(predictY(), time.getSecondOfMinute > 56 && time.getMinuteOfHour != 59))
     else if (xPos < 24 && (xPos + xSpeed >= 24))
-      List(BallPassNetTowardRight(predictY(), time.getSecondOfMinute > 56))
+      List(BallPassNetTowardRight(predictY(), time.getSecondOfMinute > 56 && time.getMinuteOfHour == 59))
     else
       List()
 

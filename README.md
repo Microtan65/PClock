@@ -36,6 +36,9 @@ It provides a set of time animations which include:
   if ommitted is single shot. Once the message has reached the end of display, the current time animation is displayed.
   * Displaying a scrolling RSS feed subject text of the first item given an RSS feed URL. This can be single shot, or repeated with a given frequency 
   (in seconds) (`POST http://<ip:8080>/animationf/1` with a json body of `{"data":"<rss_feed_url>", "freq":"<seconds>"}`. 
+  
+  An example json for UK BBC news to update every 5 minutes would be {"data":"http://feeds.bbci.co.uk/news/rss.xml?edition=uk", "freq":300}
+  
   freq is optional, if ommitted is single shot. Once the message has reached the end of display, the current time animation is displayed.
   * Adjusting the brightness of the LED panel given a 0-100 percentage value (`POST http://<ip:8080>/brightness/<percent>`)
 

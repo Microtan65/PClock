@@ -2,24 +2,31 @@ package stevebullimore.pclock.animsup
 
 import scala.concurrent.duration._
 import java.net.InetAddress
+
 import org.joda.time.DateTime
-import akka.actor.{Actor, ActorRef, Props, Cancellable}
+import akka.actor.{Actor, ActorRef, Cancellable, Props}
 import messages._
 import states._
+import stevebullimore.pclock.bars.BarsAnimation
+import stevebullimore.pclock.clockscroll.TimeAndDateScrollAnimation
+import stevebullimore.pclock.clockscroll.TimeScrollAnimation
 import stevebullimore.pclock.pong._
 import stevebullimore.pclock.invaders._
 import stevebullimore.pclock.msg._
 import stevebullimore.pclock.rss._
 import stevebullimore.pclock.display._
+import stevebullimore.pclock.unixtime._
 
 class AnimationSupervisor extends Actor {
   import context._
   
-  private val startupState = RunningFinite(0, Option("PClock v0.1"), None, 0)
+  private val startupState = RunningFinite(0, Option(InetAddress.getLocalHost.getHostAddress), None, 4)
   
   private val display = system.actorOf(Props[LEDDisplay])
   
-  private val continuousAnims = List[ActorRef](system.actorOf(Props[PongAnimation]), system.actorOf(Props[InvadersAnimation]))
+  private val continuousAnims = List[ActorRef](system.actorOf(Props[PongAnimation]), system.actorOf(Props[BlankAnimation]),
+    system.actorOf(Props[TimeScrollAnimation]), system.actorOf(Props[TimeAndDateScrollAnimation]), system.actorOf(Props[BarsAnimation]),
+    system.actorOf(Props[UnixTimeAnimation]))
   private val finiteAnims = List[ActorRef](system.actorOf(Props[MsgAnimation]), system.actorOf(Props[RssAnimation]))
   
   override def preStart() = {

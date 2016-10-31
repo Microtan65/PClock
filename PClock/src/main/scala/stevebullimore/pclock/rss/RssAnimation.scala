@@ -16,7 +16,7 @@ class RssAnimation extends Actor {
 
   val msgAnimation = context.system.actorOf(Props[MsgAnimation])
   
-  def receive = idle()
+  override def receive = idle()
  
   def idle(): Receive = {
     case AnimationInit(_, data) =>

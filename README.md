@@ -29,6 +29,7 @@ It provides a set of time animations which include:
   * Displays nothing. Used for turning the clock off (see below)
 
 ## The code includes an HTTP REST interface which allows:
+  * Note all POST requests require HTTP header content-type=application/json
   * Selecting a time animation from the above list (`POST http://<ip:8080>/animationc/<animation_number>`)
   * Displaying an adhoc scrolling message. This can be single shot, or repeated with a given frequency 
   (in seconds) (`POST http://<ip:8080>/animationf/0` with a json body of `{"data":"message","freq":"<seconds>"}`. freq is optional, 

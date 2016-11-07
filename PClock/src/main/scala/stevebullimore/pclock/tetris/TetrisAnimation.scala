@@ -1,5 +1,6 @@
 package stevebullimore.pclock.tetris
 
+import scala.util.Random
 import org.joda.time.DateTime
 import stevebullimore.pclock.animsup.messages._
 import akka.actor.Actor
@@ -33,11 +34,15 @@ class TetrisAnimation extends Actor {
   
   private def init(): Unit = {
         sender() ! Frame(List())
-        context.become(animate(DigitInstance(digits(0), 5, digitsY,
-            digits(0).shapePlacements.zipWithIndex.map { case(sp, i) => FallingShapePlacement(sp, 4 + sp.x, (0 - digitsY) - (i * 4), sp.rotation) }), 0))
+        context.become(animate(createDigitInstance(0, 5), 0))
+  }
+  
+  private def createDigitInstance(digit: Int, x: Int): DigitInstance = {
+    DigitInstance(digits(digit), x, digitsY,
+       digits(digit).shapePlacements.zipWithIndex.map { case(sp, i) => FallingShapePlacement(sp, sp.x + (Random.nextInt(7) - 3), (0 - digitsY) - (i * 6), Random.nextInt(3)) })
   }
 }
 
 object TetrisAnimation {
-  val digitsY = 5
+  val digitsY = 6
 }

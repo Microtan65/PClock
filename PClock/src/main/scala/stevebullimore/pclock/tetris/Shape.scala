@@ -34,6 +34,16 @@ case class DigitInstance(digit: Digit, x: Int, y: Int, fallingShapePlacements: L
   def update(): DigitInstance = {
     DigitInstance(digit, x, y, fallingShapePlacements.map { fsp => 
       val cy = if (fsp.cy < fsp.placement.y) fsp.cy + 1 else fsp.cy
-      FallingShapePlacement(fsp.placement, fsp.cx, cy, fsp.cr) })
+      val cx = if (fsp.cx == fsp.placement.x) fsp.cx else {
+        if (fsp.placement.y - fsp.cy < (Math.abs(fsp.cx - fsp.placement.x)+2)) {
+          if (fsp.cx > fsp.placement.x) fsp.cx - 1 else fsp.cx + 1
+        } else fsp.cx
+      }
+      val cr = if (fsp.placement.rotation == fsp.cr) fsp.cr else {
+        if (fsp.placement.y - fsp.cy > 3) fsp.cr else {
+          if (fsp.cr > fsp.placement.rotation) fsp.cr - 1 else fsp.cr + 1
+        }
+      }
+      FallingShapePlacement(fsp.placement, cx, cy, cr) })
   }
 }

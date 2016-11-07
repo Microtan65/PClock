@@ -14,6 +14,7 @@ import stevebullimore.pclock.pong._
 import stevebullimore.pclock.invaders._
 import stevebullimore.pclock.msg._
 import stevebullimore.pclock.rss._
+import stevebullimore.pclock.tetris._
 import stevebullimore.pclock.display._
 import stevebullimore.pclock.unixtime._
 
@@ -26,7 +27,7 @@ class AnimationSupervisor extends Actor {
   
   private val continuousAnims = List[ActorRef](system.actorOf(Props[PongAnimation]), system.actorOf(Props[BlankAnimation]),
     system.actorOf(Props[TimeScrollAnimation]), system.actorOf(Props[TimeAndDateScrollAnimation]), system.actorOf(Props[BarsAnimation]),
-    system.actorOf(Props[UnixTimeAnimation]))
+    system.actorOf(Props[UnixTimeAnimation]), system.actorOf(Props[TetrisAnimation]))
   private val finiteAnims = List[ActorRef](system.actorOf(Props[MsgAnimation]), system.actorOf(Props[RssAnimation]))
   
   override def preStart() = {
@@ -41,7 +42,7 @@ class AnimationSupervisor extends Actor {
       startFinite(id, data, freq, state.id)
     
     case SelectContinuousAnim(id) =>
-      startContinuous(id, state.cancelFinite)
+      if (id != state.id) startContinuous(id, state.cancelFinite)
       
     case msg: Any => commonMessages(continuousAnims(state.id))(msg)
   }

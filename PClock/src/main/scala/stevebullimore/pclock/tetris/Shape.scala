@@ -1,5 +1,7 @@
 package stevebullimore.pclock.tetris
 
+import scala.util.Random
+
 case class Shape(pixels: List[(Int, Int)]) {
   // rotation matrices of 90deg, 180deg, 270deg
   val rotations = Array((0, -1), (1, 0)) :: Array((-1, 0), (0, -1)) :: Array((0, 1), (-1, 0)) :: Nil
@@ -17,6 +19,14 @@ case class ShapePlacement(shape: Shape, x: Int, y: Int, rotation: Int) {
 case class FallingShapePlacement(placement: ShapePlacement, cx: Int, cy: Int, cr: Int) {
   def draw(): List[(Int, Int)] = {
     placement.shape.rotate(cr).map { case(x1, y1) => (x1 + cx, y1 + cy) }
+  }
+}
+
+object FallingShapePlacement {
+  val random = new Random(System.currentTimeMillis())
+  
+  def randomPositionAndRotation(placement: ShapePlacement, y: Int, i: Int): FallingShapePlacement = {
+    FallingShapePlacement(placement, placement.x + (random.nextInt(7) - 3), (0 - y) - (i * 6), random.nextInt(4))
   }
 }
 

@@ -21,7 +21,7 @@ import stevebullimore.pclock.unixtime._
 class AnimationSupervisor extends Actor {
   import context._
   
-  private val startupState = RunningFinite(0, Option(InetAddress.getLocalHost.getHostAddress), None, 4)
+  private val startupState = RunningFinite(0, Option(InetAddress.getLocalHost.getHostAddress), None, 3)
   
   private val display = system.actorOf(Props[LEDDisplay])
   

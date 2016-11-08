@@ -20,7 +20,7 @@ case class FallingShapePlacement(placement: ShapePlacement, cx: Int, cy: Int, cr
   }
 }
 
-case class Digit(shapePlacements: List[ShapePlacement]) {
+case class Digit(id: Int, shapePlacements: List[ShapePlacement]) {
 }
 
 case class DigitInstance(digit: Digit, x: Int, y: Int, fallingShapePlacements: List[FallingShapePlacement]) {
@@ -40,7 +40,7 @@ case class DigitInstance(digit: Digit, x: Int, y: Int, fallingShapePlacements: L
         } else fsp.cx
       }
       val cr = if (fsp.placement.rotation == fsp.cr) fsp.cr else {
-        if (fsp.placement.y - fsp.cy > 3) fsp.cr else {
+        if (fsp.placement.y - fsp.cy > 4) fsp.cr else {
           if (fsp.cr > fsp.placement.rotation) fsp.cr - 1 else fsp.cr + 1
         }
       }

@@ -7,25 +7,34 @@ It is written in Scala using Akka asyncronous operation and Spray to provide an 
 
 It provides a set of time animations which include:
 
-1. Pong Clock (animationc/0)
+1. Pong Clock (POST animationc/0)
   * A game of pong where the computer plays itself such that the score represents the current time. 
   * Each minute the right player wins advancing the minutes value. 
   * Each hour the left player wins advancing the hours value and the right player score resets to zero.
   * The speed of the ball increases during each minute of play giving a visual indication the time within the minute.
 
-2. Simple time (animationc/2)
+2. Simple time (POST animationc/2)
   * The current time (hours, minutes, seconds) is displayed with each change of digit scrolling up from below
 
-3. Time and date (animationc/3)
+3. Time and date (POST animationc/3)
   * As per simple time, but the date (day, month, year) is displayed beneath
 
-4. Bars (animationc/4)
+4. Bars (POST animationc/4)
   * Three horizantal bars represent percentage of the current hour in the day, minute in the hour and second in the minute
   
-5. Unix time (animationc/5)
+5. Unix time (POST animationc/5)
   * Displays the current 32 bit unix time in decimal as the top number and the below the number of seconds remaining until the 2038 problem.
   
-6. Blank display (animationc/1)
+6. Tetris (POST animationc/6)
+  * Displays the time as hours & minutes digits. 
+  * Each digit update is drawn by falling tetris pieces to construct the digit
+
+7. Blocks (POST animationc/7)
+  * Displays the time as a series of blocks in an analogue clock's hours positions. 
+  * Each full block represents a full hour.
+  * Each block is made up for 9 pixels, so each pixel represents 6 minutes past the hour.
+  
+8. Blank display (animationc/1)
   * Displays nothing. Used for turning the clock off (see below)
 
 ## The code includes an HTTP REST interface which allows:
@@ -55,8 +64,6 @@ There is currently a blank animation on index 1 which can be used here to turn t
 commands such as 'Echo, turn off unix time' etc.
 
 ## Currently being developed:
-  * Add a tetris themed time animation
   * Add a space invaders themed time animation
   * Add moon phase animation
-  * Add a 'block' time dial animation
 

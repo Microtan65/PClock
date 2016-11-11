@@ -32,7 +32,8 @@ It provides a set of time animations which include:
 7. Blocks (POST animationc/7)
   * Displays the time as a series of blocks in an analogue clock's hours positions. 
   * Each full block represents a full hour.
-  * Each block is made up for 9 pixels, so each pixel represents 6 minutes past the hour.
+  * Each block is made up of 10 pixels, so each pixel represents 5 minutes past the hour.
+
   
 8. Blank display (animationc/1)
   * Displays nothing. Used for turning the clock off (see below)

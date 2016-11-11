@@ -8,6 +8,8 @@ import akka.actor.{Actor, ActorRef, Cancellable, Props}
 import messages._
 import states._
 import stevebullimore.pclock.bars.BarsAnimation
+import stevebullimore.pclock.blank.BlankAnimation
+import stevebullimore.pclock.blocks.BlocksAnimation
 import stevebullimore.pclock.clockscroll.TimeAndDateScrollAnimation
 import stevebullimore.pclock.clockscroll.TimeScrollAnimation
 import stevebullimore.pclock.pong._
@@ -27,7 +29,7 @@ class AnimationSupervisor extends Actor {
   
   private val continuousAnims = List[ActorRef](system.actorOf(Props[PongAnimation]), system.actorOf(Props[BlankAnimation]),
     system.actorOf(Props[TimeScrollAnimation]), system.actorOf(Props[TimeAndDateScrollAnimation]), system.actorOf(Props[BarsAnimation]),
-    system.actorOf(Props[UnixTimeAnimation]), system.actorOf(Props[TetrisAnimation]))
+    system.actorOf(Props[UnixTimeAnimation]), system.actorOf(Props[TetrisAnimation]), system.actorOf(Props[BlocksAnimation]))
   private val finiteAnims = List[ActorRef](system.actorOf(Props[MsgAnimation]), system.actorOf(Props[RssAnimation]))
   
   override def preStart() = {

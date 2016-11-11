@@ -13,8 +13,7 @@ case class Shape(pixels: List[(Int, Int)]) {
   }
 }
 
-case class ShapePlacement(shape: Shape, x: Int, y: Int, rotation: Int) {
-}
+case class ShapePlacement(shape: Shape, x: Int, y: Int, rotation: Int)
 
 case class FallingShapePlacement(placement: ShapePlacement, cx: Int, cy: Int, cr: Int) {
   def draw(): List[(Int, Int)] = {
@@ -30,12 +29,9 @@ object FallingShapePlacement {
   }
 }
 
-case class Digit(id: Int, shapePlacements: List[ShapePlacement]) {
-}
+case class Digit(id: Int, shapePlacements: List[ShapePlacement])
 
 case class DigitInstance(digit: Digit, x: Int, y: Int, fallingShapePlacements: List[FallingShapePlacement]) {
-  import DigitInstance._
-
   def draw(): List[(Int, Int)] = {
     fallingShapePlacements.foldLeft(List[(Int, Int)]())((pixels, fsp) => pixels ++ fsp.draw()).map {
       case (x1, y1) => (x1 + x, y1 + y) 

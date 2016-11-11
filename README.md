@@ -34,7 +34,7 @@ It provides a set of time animations which include:
 7. Blocks (POST animationc/7)
   * Displays the time as a series of blocks in an analogue clock's hours positions. 
   * Each full block represents a full hour.
-  * Each block is made up of 10 pixels, so each pixel represents 5 minutes past the hour.
+  * Each block is made up of 12 pixels, so each pixel represents 5 minutes past the hour.
   
 8. Blank display (animationc/1)
   * Displays nothing. Used for turning the clock off (see below)
@@ -51,7 +51,7 @@ It provides a set of time animations which include:
   An example json for UK BBC news to update every 5 minutes would be {"data":"http://feeds.bbci.co.uk/news/rss.xml?edition=uk", "freq":300}
   
   freq is optional, if ommitted is single shot. Once the message has reached the end of display, the current time animation is displayed.
-  * Adjusting the brightness of the LED panel given a 0-100 percentage value (`POST http://<ip:8080>/brightness/<percent>`)
+  * Adjust the brightness of the LED panel given a 0-100 percentage value (`POST http://<ip:8080>/brightness/<percent>`)
 
 ## Home automation - EG Amazon Echo
 

@@ -3,7 +3,9 @@ A clock in scala to run on RPI driving Sure2416 LED panels via SPI
 
 This code is inteded to be run on a Rasberry Pi to drive two Sure 2416 LED panels mounted side by side giving a display area of 48x16 pixels. 
 It uses the pi4j java library to drive the Raspberry Pi SPI interface.
-It is written in Scala using Akka asyncronous operation and Spray to provide an HTTP REST interface for control.
+It is written in Scala using Akka asyncronous operation and Spray for HTTP support.
+There are a set of different time animations as well as scrolling text function which can display an adhoc message or an RSS feed.
+An HTTP REST interface allows control of the clock for selecting the current time animation and controlling the message/RSS display.
 
 It provides a set of time animations which include:
 
@@ -33,18 +35,17 @@ It provides a set of time animations which include:
   * Displays the time as a series of blocks in an analogue clock's hours positions. 
   * Each full block represents a full hour.
   * Each block is made up of 10 pixels, so each pixel represents 5 minutes past the hour.
-
   
 8. Blank display (animationc/1)
   * Displays nothing. Used for turning the clock off (see below)
 
-## The code includes an HTTP REST interface which allows:
-  * Note all POST requests require HTTP header content-type=application/json
-  * Selecting a time animation from the above list (`POST http://<ip:8080>/animationc/<animation_number>`)
-  * Displaying an adhoc scrolling message. This can be single shot, or repeated with a given frequency 
+## REST interface
+  * All POST requests require HTTP header content-type=application/json
+  * Select a time animation from the above list (`POST http://<ip:8080>/animationc/<animation_number>`)
+  * Display an adhoc scrolling message. This can be single shot, or repeated with a given frequency 
   (in seconds) (`POST http://<ip:8080>/animationf/0` with a json body of `{"data":"message","freq":"<seconds>"}`. freq is optional, 
   if ommitted is single shot. Once the message has reached the end of display, the current time animation is displayed.
-  * Displaying a scrolling RSS feed subject text of the first item given an RSS feed URL. This can be single shot, or repeated with a given frequency 
+  * Display a scrolling RSS feed subject text of the first item given an RSS feed URL. This can be single shot, or repeated with a given frequency 
   (in seconds) (`POST http://<ip:8080>/animationf/1` with a json body of `{"data":"<rss_feed_url>", "freq":"<seconds>"}`. 
   
   An example json for UK BBC news to update every 5 minutes would be {"data":"http://feeds.bbci.co.uk/news/rss.xml?edition=uk", "freq":300}
@@ -67,4 +68,5 @@ commands such as 'Echo, turn off unix time' etc.
 ## Currently being developed:
   * Add a space invaders themed time animation
   * Add moon phase animation
+  * Social media integration
 

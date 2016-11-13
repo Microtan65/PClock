@@ -5,14 +5,14 @@ import stevebullimore.pclock.animsup.messages._
 
 class BlocksAnimation extends Actor {
 
-  private val blockPos = (22,1) :: (27, 3) :: (32, 5) :: (37, 7) :: (32, 9) :: (27, 11) :: (22, 13) :: (17, 11) :: (12, 9) :: (7, 7) :: (12, 5) :: (17, 3) :: Nil
+  private val blockPos = (27, 3) :: (32, 5) :: (37, 7) :: (32, 9) :: (27, 11) :: (22, 13) :: (17, 11) :: (12, 9) :: (7, 7) :: (12, 5) :: (17, 3) :: (22,1) :: Nil
   
   override def receive = {
     case AnimationInit(_, _) => 
       sender() ! Frame(List())
     
     case Animate(time) =>
-      sender() ! Frame(drawHour(time.getHourOfDay % 12, time.getMinuteOfHour + (1 - (time.getMillisOfSecond / 500)) * 5, List()))
+      sender() ! Frame(drawHour(time.getHourOfDay % 12, time.getMinuteOfHour + (time.getMillisOfSecond / 500) * 5, List()))
   }
   
   private def drawHour(hour: Int, minute: Int, pixels: List[(Int, Int)]): List[(Int, Int)] = {

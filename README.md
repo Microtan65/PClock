@@ -39,6 +39,11 @@ It provides a set of time animations which include:
 8. Blank display (animationc/1)
   * Displays nothing. Used for turning the clock off (see below)
 
+9. Audio Spectrum Analyser (animationc/8)
+  * Displays a 48 band spectrum analyser using the sound input of the PI's default sound module
+  * Since the PI has no audio input a device needs to be added - for example a USB audio unit, or USB microphone etc.
+  * Uses the ddf minim audio java library to perform the FFT.
+
 ## REST interface
   * All POST requests require HTTP header content-type=application/json
   * Select a time animation from the above list (`POST http://<ip:8080>/animationc/<animation_number>`)

@@ -1,10 +1,22 @@
 # PClock
 A clock in scala to run on RPI driving Sure2416 LED panels via SPI
 
-This code is inteded to be run on a Rasberry Pi to drive two Sure 2416 LED panels mounted side by side giving a display area of 48x16 pixels. 
-It uses the pi4j java library to drive the Raspberry Pi SPI interface.
-It is written in Scala using Akka asyncronous operation and Spray for HTTP support.
-There are a set of different time animations as well as scrolling text function which can display an adhoc message or an RSS feed.
+This code is inteded to be run on a Rasberry Pi to drive two Sure 2416 LED panels mounted side by side giving a display area of 48x16 pixels. It uses the pi4j java library to drive the Raspberry Pi SPI interface.
+
+The IO connections from RPI GPIO to the Sure LED panels are as follows:
+
+          RPI -> Sure 
+    26 (CE0)  -> 2 (CS2)
+    24 (CE1)  -> 3 (CS3)
+    23 (SCLK) -> 5 (WR)
+    19 (MOSI) -> 7 (DATA)
+     6 (GND)  -> 8 (GND)
+     
+On the left hand LED panel, set the DIP switches so that CS3 is enabled. On the right hand LED panel set the DIP switches so that CS2 is enabled.
+
+The clock software is written in Scala using Akka asyncronous operation and Spray for HTTP support.
+There are a set of different time animations as well as a scrolling text function which can display an adhoc message or an RSS feed.
+
 An HTTP REST interface allows control of the clock for selecting the current time animation and controlling the message/RSS display.
 
 It provides a set of time animations which include:

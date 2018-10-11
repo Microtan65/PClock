@@ -48,13 +48,21 @@ It provides a set of time animations which include:
   * Each full block represents a full hour.
   * Each block is made up of 12 pixels, so each pixel represents 5 minutes past the hour.
   
-8. Blank display (animationc/1)
+8. Blank display (POST animationc/1)
   * Displays nothing. Used for turning the clock off (see below)
 
-9. Audio Spectrum Analyser (animationc/8)
+9. Audio Spectrum Analyser (POST animationc/8)
   * Displays a 48 band spectrum analyser using the sound input of the PI's default sound module
   * Since the PI has no audio input a device needs to be added - for example a USB audio unit, or USB microphone etc.
   * Uses the ddf minim audio java library to perform the FFT.
+
+10. Conways game of life (POST animation/9)
+  * Displays time in top left corner with the rest of the area showing evolving cells of Conways game of life.
+  * The display seeds with a random pattern every 15 seconds.
+  
+11. Timer (POST animation/10)
+  * Displays a countdown timer.
+  * The body of the request contains the duration in seconds to count down.
 
 ## REST interface
   * All POST requests require HTTP header content-type=application/json

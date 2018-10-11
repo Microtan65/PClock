@@ -15,6 +15,7 @@ import spray.routing.Directive.pimpApply
 import spray.routing.HttpService
 import stevebullimore.pclock.animsup.messages._
 import stevebullimore.pclock.display.Brightness
+import org.joda.time.DateTime
 
 class HttpActor extends Actor with ClockHttpService {
 
@@ -25,10 +26,12 @@ class HttpActor extends Actor with ClockHttpService {
   }
 }
 
+case class ContinuousAnimation(data: Option[String])
 case class FiniteAnimation(data: Option[String], freq: Option[Int])
 case class AnimationData(id: Int, name: String, continuous: Boolean, active: Boolean)
 
 object JsonProtocol extends DefaultJsonProtocol {
+  implicit val ContinuousAnimationFormat = jsonFormat1(ContinuousAnimation)
   implicit val FiniteAnimationFormat = jsonFormat2(FiniteAnimation)
   implicit val AnimationDataFormat = jsonFormat4(AnimationData)
 }
@@ -52,6 +55,16 @@ trait ClockHttpService extends HttpService {
             }
           }
         }
+      } ~
+      path("animationc" / """.*""".r) { animationName =>
+        onSuccess(actorRefFactory.actorSelection("../../" + animationName).resolveOne) { actor =>
+          onSuccess(actor ? AskStatus(new DateTime())) { 
+            case animStatus: AnimationStatus =>
+            complete {
+              animStatus.status
+            }
+          }
+        }
       }
     } ~
     post {
@@ -60,8 +73,10 @@ trait ClockHttpService extends HttpService {
         complete(StatusCodes.NoContent)
       } ~
       path("animationc" / IntNumber) { animationIdx =>
-        actorRefFactory.actorSelection("../../AnimationActor") ! SelectContinuousAnim(animationIdx)
-        complete(StatusCodes.NoContent)
+        entity(as[ContinuousAnimation]) { ca => 
+          actorRefFactory.actorSelection("../../AnimationActor") ! SelectContinuousAnim(animationIdx, ca.data)
+          complete(StatusCodes.NoContent)
+        }
       } ~
       path("animationf" / IntNumber) { animationIdx =>
         entity(as[FiniteAnimation]) { fa => 

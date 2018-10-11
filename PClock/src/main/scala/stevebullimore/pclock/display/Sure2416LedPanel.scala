@@ -7,7 +7,7 @@ class Sure2416LedPanel(panelNum: Int) {
   private val xEnd = xStart + width - 1;
 
   def computeFrame(pixels: List[(Int, Int)]): Array[Byte] = {
-    val bytes: Array[Byte] = new Array[Byte](((width * height) / 8) + 2)
+    val bytes = new Array[Byte](((width * height) / 8) + 2)
     bytes(0) = writeCommand
     pixels.foreach { case (x, y) => // side effects to the bytes() array..
       if (x >= xStart && x <= xEnd && y>=0 && y < height) {

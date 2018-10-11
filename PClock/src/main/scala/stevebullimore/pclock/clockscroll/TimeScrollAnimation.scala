@@ -35,8 +35,8 @@ class TimeScrollAnimation extends Actor {
   }
 
   private def drawScrollingDigit(xPos: Int, yPos: Int, changing: Boolean, millisInSec: Long, digit: Int, maxDigit: Int): List[(Int, Int)] = {
-    if (changing && millisInSec < 500) {
-      val yShift = millisInSec / 100
+    if (changing && millisInSec < 250) {
+      val yShift = millisInSec / 50
       val prevDigit = if (digit == 0) maxDigit else digit - 1
       val pixels = Digit3x5.draw(xPos, yPos - yShift.toInt, prevDigit) ++ Digit3x5.draw(xPos, (yPos + 6) - yShift.toInt, digit)
       pixels.filter{case (_, y1) => y1 >= yPos && y1 <= yPos+5}

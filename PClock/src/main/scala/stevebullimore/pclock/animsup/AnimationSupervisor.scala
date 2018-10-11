@@ -20,6 +20,7 @@ import stevebullimore.pclock.rss._
 import stevebullimore.pclock.tetris._
 import stevebullimore.pclock.display._
 import stevebullimore.pclock.unixtime._
+import stevebullimore.pclock.life.LifeAnimation
 
 class AnimationSupervisor extends Actor {
   import context._
@@ -28,11 +29,11 @@ class AnimationSupervisor extends Actor {
   
   private val display = system.actorOf(Props[LEDDisplay])
   
-  private val continuousAnims = List[ActorRef](system.actorOf(Props[PongAnimation]), system.actorOf(Props[BlankAnimation]),
-    system.actorOf(Props[TimeScrollAnimation]), system.actorOf(Props[TimeAndDateScrollAnimation]), system.actorOf(Props[BarsAnimation]),
-    system.actorOf(Props[UnixTimeAnimation]), system.actorOf(Props[TetrisAnimation]), system.actorOf(Props[BlocksAnimation]),
-    system.actorOf(Props[AnalyserAnimation]))
-  private val finiteAnims = List[ActorRef](system.actorOf(Props[MsgAnimation]), system.actorOf(Props[RssAnimation]))
+  private val continuousAnims = List[ActorRef](system.actorOf(Props[PongAnimation], name = "PongAnimation"), system.actorOf(Props[BlankAnimation], name = "BlankAnimation"),
+    system.actorOf(Props[TimeScrollAnimation], name = "TimeScrollAnimation"), system.actorOf(Props[TimeAndDateScrollAnimation], name = "TimeAndDateScrollAnimation"), system.actorOf(Props[BarsAnimation], name = "BarsAnimation"),
+    system.actorOf(Props[UnixTimeAnimation], name = "UnixTimeAnimation"), system.actorOf(Props[TetrisAnimation], name = "TetrisAnimation"), system.actorOf(Props[BlocksAnimation], name = "BlocksAnimation"),
+    system.actorOf(Props[AnalyserAnimation], name = "AnalyserAnimation"), system.actorOf(Props[LifeAnimation], name = "LifeAnimation"), system.actorOf(Props[TimerAnimation], name = "TimerAnimation"))
+  private val finiteAnims = List[ActorRef](system.actorOf(Props[MsgAnimation], name = "MsgAnimation"), system.actorOf(Props[RssAnimation], name = "RssAnimation"))
   
   override def preStart() = {
     startFinite(startupState.id, startupState.data, startupState.freq, startupState.contId)
@@ -45,8 +46,8 @@ class AnimationSupervisor extends Actor {
       state.cancelFinite.map(cancelFinite => cancelFinite.cancel)
       startFinite(id, data, freq, state.id)
     
-    case SelectContinuousAnim(id) =>
-      if (id != state.id) startContinuous(id, state.cancelFinite)
+    case SelectContinuousAnim(id, data) =>
+      if (id != state.id) startContinuous(id, data, state.cancelFinite)
       
     case msg: Any => commonMessages(continuousAnims(state.id))(msg)
   }
@@ -56,9 +57,9 @@ class AnimationSupervisor extends Actor {
       val cancelFinite = state.freq.map { freq =>
         system.scheduler.scheduleOnce(freq seconds, self, SelectFiniteAnim(state.id, state.data, Option(freq))) 
       }
-      startContinuous(state.contId, cancelFinite)
+      startContinuous(state.contId, None, cancelFinite)
       
-    case SelectContinuousAnim(id) =>
+    case SelectContinuousAnim(id, _) =>
       context.become(runningFinite(RunningFinite(state.id, state.data, state.freq, id)))
       
     case SelectFiniteAnim(id, data, freq) =>
@@ -66,9 +67,9 @@ class AnimationSupervisor extends Actor {
     case msg: Any => commonMessages(finiteAnims(state.id))(msg)
   }
   
-  private def startContinuous(id: Int, cancelFinite: Option[Cancellable]) {
+  private def startContinuous(id: Int, data: Option[String], cancelFinite: Option[Cancellable]) {
     continuousAnims.lift(id).foreach { anim =>
-      anim ! AnimationInit(new DateTime(), None)
+      anim ! AnimationInit(new DateTime(), data)
       context.become(runningContinuous(RunningContinuous(id, cancelFinite)))
     }
   }
@@ -87,8 +88,8 @@ class AnimationSupervisor extends Actor {
         system.scheduler.scheduleOnce(15 millis, anim, Animate(new DateTime()))
       }
     case AskAnimations() =>
-      sender() ! AnimationInfos(continuousAnims.zipWithIndex.map{case (a, i) => AnimationInfos.AnimationInfo(i, "name", true, a == anim)} ++
-        finiteAnims.zipWithIndex.map{case (a, i) => AnimationInfos.AnimationInfo(i, "name", false, a == anim)})
+      sender() ! AnimationInfos(continuousAnims.zipWithIndex.map{case (a, i) => AnimationInfos.AnimationInfo(i, a.path.name, true, a == anim)} ++
+        finiteAnims.zipWithIndex.map{case (a, i) => AnimationInfos.AnimationInfo(i, a.path.name, false, a == anim)})
     case b: Brightness =>
       display ! b
   }

@@ -14,7 +14,8 @@ case class Brightness(levelPercent: Int)
 class LEDDisplay extends Actor {
   import context.dispatcher
 
-  private val initCommands = List(Array[Byte](-128,0),Array[Byte](-124,-128),Array[Byte](-126,-128),Array[Byte](-125,0),Array[Byte](-128,32),Array[Byte](-128,96))
+  private val initCommandsMaster = List(Array[Byte](-128,0),Array[Byte](-124,-128),Array[Byte](-125,0),Array[Byte](-128,32),Array[Byte](-128,96))
+  private val initCommandsSlave = List(Array[Byte](-128,0),Array[Byte](-124,-128),Array[Byte](-126,-128),Array[Byte](-128,32),Array[Byte](-128,96))
   private val panel0 = new Sure2416LedPanel(0)
   private val panel1 = new Sure2416LedPanel(1)
 
@@ -28,10 +29,8 @@ class LEDDisplay extends Actor {
 
   override def receive = {
     case Init() =>
-      initCommands.foreach{ cmd =>
-        SpiWriter.writePanel0(cmd)
-        SpiWriter.writePanel1(cmd)
-      }
+      initCommandsMaster.foreach{ cmd => SpiWriter.writePanel0(cmd) }
+      initCommandsSlave.foreach{ cmd => SpiWriter.writePanel1(cmd) }
 
     case Brightness(levelPercent) =>
       val level = (levelPercent * 15) / 100
